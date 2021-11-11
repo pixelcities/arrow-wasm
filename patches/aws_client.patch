@@ -1,0 +1,38 @@
+diff --git a/aws-cpp-sdk-core/source/client/AWSClient.cpp b/aws-cpp-sdk-core/source/client/AWSClient.cpp
+index 0743410..7642238 100644
+--- a/aws-cpp-sdk-core/source/client/AWSClient.cpp
++++ b/aws-cpp-sdk-core/source/client/AWSClient.cpp
+@@ -40,6 +40,9 @@
+ #include <cstring>
+ #include <cassert>
+ 
++// super hacky way of breaking the indirect barrier (for now)
++#include <emscripten.h>
++
+ using namespace Aws;
+ using namespace Aws::Client;
+ using namespace Aws::Http;
+@@ -478,6 +481,7 @@ HttpResponseOutcome AWSClient::AttemptOneRequest(const std::shared_ptr<HttpReque
+     }
+ 
+     AWS_LOGSTREAM_DEBUG(AWS_CLIENT_LOG_TAG, "Request Successfully signed");
++    emscripten_sleep(0);
+     std::shared_ptr<HttpResponse> httpResponse(
+         m_httpClient->MakeRequest(httpRequest, m_readRateLimiter.get(), m_writeRateLimiter.get()));
+ 
+@@ -509,6 +513,7 @@ HttpResponseOutcome AWSClient::AttemptOneRequest(const std::shared_ptr<HttpReque
+     AddCommonHeaders(*httpRequest);
+ 
+     AWS_LOGSTREAM_DEBUG(AWS_CLIENT_LOG_TAG, "Request Successfully signed");
++    emscripten_sleep(0);
+     std::shared_ptr<HttpResponse> httpResponse(
+         m_httpClient->MakeRequest(httpRequest, m_readRateLimiter.get(), m_writeRateLimiter.get()));
+ 
+@@ -852,6 +857,7 @@ std::shared_ptr<Aws::Http::HttpRequest> AWSClient::ConvertToRequestForPresigning
+ 
+ std::shared_ptr<Aws::Http::HttpResponse> AWSClient::MakeHttpRequest(std::shared_ptr<Aws::Http::HttpRequest>& request) const
+ {
++    emscripten_sleep(0);
+     return m_httpClient->MakeRequest(request, m_readRateLimiter.get(), m_writeRateLimiter.get());
+ }
+ 

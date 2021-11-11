@@ -1,0 +1,70 @@
+diff --git a/aws-cpp-sdk-core/source/config/AWSProfileConfigLoader.cpp b/aws-cpp-sdk-core/source/config/AWSProfileConfigLoader.cpp
+index f5ce803..f2272ad 100644
+--- a/aws-cpp-sdk-core/source/config/AWSProfileConfigLoader.cpp
++++ b/aws-cpp-sdk-core/source/config/AWSProfileConfigLoader.cpp
+@@ -253,15 +253,6 @@ namespace Aws
+         {
+             m_profiles.clear();
+ 
+-            Aws::IFStream inputFile(m_fileName.c_str());
+-            if(inputFile)
+-            {
+-                ConfigFileProfileFSM parser;
+-                parser.ParseStream(inputFile);
+-                m_profiles = parser.GetProfiles();
+-                return m_profiles.size() > 0;
+-            }
+-
+             AWS_LOGSTREAM_INFO(CONFIG_FILE_LOADER, "Unable to open config file " << m_fileName << " for reading.");
+ 
+             return false;
+@@ -269,46 +260,14 @@ namespace Aws
+ 
+         bool AWSConfigFileProfileConfigLoader::PersistInternal(const Aws::Map<Aws::String, Profile>& profiles)
+         {
+-            Aws::OFStream outputFile(m_fileName.c_str(), std::ios_base::out | std::ios_base::trunc);
+-            if(outputFile)
++            if(false) // keep compiler happy (-Wunused)
+             {
+                 for(auto& profile : profiles)
+                 {
+                     Aws::String prefix = m_useProfilePrefix ? PROFILE_PREFIX : "";
+-
+-                    AWS_LOGSTREAM_DEBUG(CONFIG_FILE_LOADER, "Writing profile " << profile.first << " to disk.");
+-
+-                    outputFile << LEFT_BRACKET << prefix << profile.second.GetName() << RIGHT_BRACKET << std::endl;
+-                    const Aws::Auth::AWSCredentials& credentials = profile.second.GetCredentials();
+-                    outputFile << ACCESS_KEY_ID_KEY << EQ << credentials.GetAWSAccessKeyId() << std::endl;
+-                    outputFile << SECRET_KEY_KEY << EQ << credentials.GetAWSSecretKey() << std::endl;
+-
+-                    if(!credentials.GetSessionToken().empty())
+-                    {
+-                        outputFile << SESSION_TOKEN_KEY << EQ << credentials.GetSessionToken() << std::endl;
+-                    }
+-
+-                    if(!profile.second.GetRegion().empty())
+-                    {
+-                        outputFile << REGION_KEY << EQ << profile.second.GetRegion() << std::endl;
+-                    }
+-
+-                    if(!profile.second.GetRoleArn().empty())
+-                    {
+-                        outputFile << ROLE_ARN_KEY << EQ << profile.second.GetRoleArn() << std::endl;
+-                    }
+-
+-                    if(!profile.second.GetSourceProfile().empty())
+-                    {
+-                        outputFile << SOURCE_PROFILE_KEY << EQ << profile.second.GetSourceProfile() << std::endl;
+-                    }
+-
+-                    outputFile << std::endl;
++                    AWS_LOGSTREAM_DEBUG(CONFIG_FILE_LOADER, prefix);
++                    AWS_LOGSTREAM_DEBUG(CONFIG_FILE_LOADER, profile.first);
+                 }
+-
+-                AWS_LOGSTREAM_INFO(CONFIG_FILE_LOADER, "Profiles written to config file " << m_fileName);
+-
+-                return true;
+             }
+ 
+             AWS_LOGSTREAM_WARN(CONFIG_FILE_LOADER, "Unable to open config file " << m_fileName << " for writing.");
