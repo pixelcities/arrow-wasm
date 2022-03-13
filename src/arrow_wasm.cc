@@ -25,8 +25,6 @@ using namespace emscripten;
 using arrow::Status;
 
 void load_csv(std::string csv, std::string path) {
-  std::cerr << csv << std::endl;
-
   auto input = std::make_shared<arrow::io::BufferReader>(csv);
   auto read_options = arrow::csv::ReadOptions::Defaults();
   auto parse_options = arrow::csv::ParseOptions::Defaults();
@@ -185,6 +183,14 @@ void read_remote_parquet(std::string in_path, std::string out_path, std::string 
 
   auto schema = std::make_shared<arrow::Schema>(fields);
   auto table = arrow::Table::Make(schema, chunks, -1);
+
+  std::shared_ptr<arrow::io::OutputStream> sink = *arrow::io::FileOutputStream::Open(out_path);
+  auto write_options = arrow::ipc::IpcWriteOptions::Defaults();
+  auto writer = *arrow::ipc::MakeFileWriter(sink, table->schema(), write_options);
+
+  writer->WriteTable(*table, -1);
+  writer->Close();
+  sink->Close();
 }
 
 void write_remote_parquet(std::string in_path, std::string out_path, std::string access_key, std::string secret_key, std::string session_token, const val &keys) {

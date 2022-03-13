@@ -7,7 +7,7 @@ option(ARROW_LINK_SHARED "Link to the Arrow shared library" OFF)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_BUILD_TYPE Release)
 
-add_executable(arrow_wasm arrow_wasm.cc utils/arrow_single_threaded_reader.cc)
+add_executable(arrow_wasm arrow_wasm.cc)
 
 include_directories(./)
 
