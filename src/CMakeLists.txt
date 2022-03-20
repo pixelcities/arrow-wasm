@@ -25,6 +25,7 @@ set(ASYNCIFY_CALL_STACK "
 'emscripten::internal::Invoker*',
 'read_remote_parquet*',
 'write_remote_parquet*',
+'*arrow::Table*',
 'arrow::fs::*::ObjectInputFile*',
 '*arrow::fs::*::ObjectOutputStream*',
 'arrow::fs::S3FileSystem::OpenInputFile*',
@@ -38,6 +39,7 @@ set(ASYNCIFY_CALL_STACK "
 'Aws::Client::AWSClient::MakeRequestWithUnparsedResponse*',
 'Aws::Http::CurlHttpClient::MakeRequest*',
 'arrow::io::internal::CloseFromDestructor*',
+'arrow::internal::*::SerialTaskGroup::AppendReal*',
 'parquet::SerializedFile::ParseMetaData*',
 'parquet::ParquetFileReader::Contents::Open*',
 'parquet::ParquetFileReader::Open*',
@@ -49,11 +51,13 @@ set(ASYNCIFY_CALL_STACK "
 'parquet::arrow::*::FileReaderImpl::GetFieldReader*',
 'parquet::arrow::*::FileReaderImpl::ReadRowGroups*',
 'parquet::arrow::*::FileReaderImpl::ReadTable*',
+'parquet::arrow::*::FileReaderImpl::GetRecordBatchReader*',
 '*arrow::fs::S3FileSystem::Impl::ListObjectsV2*',
 'arrow::fs::S3FileSystem::Impl::Walk*',
 'arrow::fs::S3FileSystem::GetFileInfo*',
 'arrow::dataset::ParquetFileFormat::GetReader*',
 'arrow::dataset::ParquetFileFormat::Inspect*',
+'arrow::dataset::ParquetFileFormat::ScanFile*',
 'arrow::dataset::FileSystemDatasetFactory::Make*',
 'arrow::dataset::FileSystemDatasetFactory::InspectSchemas*',
 'arrow::dataset::FileSystemDatasetFactory::Finish*',
@@ -61,9 +65,15 @@ set(ASYNCIFY_CALL_STACK "
 'arrow::dataset::DatasetFactory::Finish*',
 'arrow::dataset::ParquetFileFragment::EnsureCompleteMetadata*',
 'arrow::dataset::ParquetFileFragment::ReadPhysicalSchemaImpl*',
+'arrow::dataset::FileFragment::Scan*',
+'*arrow::dataset::GetScanTaskIterator*',
+'*arrow::dataset::ScanTask*',
+'*arrow::dataset::SyncScanner::ToTable*',
+'arrow::dataset::ParquetScanTask::Execute*',
+'arrow::dataset::FilterAndProjectScanTask::Execute*',
 'arrow::dataset::Fragment::ReadPhysicalSchema*'
 ")
 string(REGEX REPLACE "\n" "" ASYNCIFY_CALL_STACK "${ASYNCIFY_CALL_STACK}")
 
-set_target_properties(arrow_wasm PROPERTIES LINK_FLAGS "--bind -g -O2 -s ENVIRONMENT='web' -s WASM=1 -s ASYNCIFY=1 -s ASYNCIFY_ADVISE=0 -s ASYNCIFY_IGNORE_INDIRECT=0 -s ASYNCIFY_ADD=\"[${ASYNCIFY_CALL_STACK}]\" -s FETCH=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ASSERTIONS=1 -s NO_EXIT_RUNTIME=1 -s FORCE_FILESYSTEM=1 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s MODULARIZE=1 -s EXPORT_NAME='Arrow' -s EXPORTED_RUNTIME_METHODS=\"['FS']\"")
+set_target_properties(arrow_wasm PROPERTIES LINK_FLAGS "--bind -g -Oz -s ENVIRONMENT='web' -s WASM=1 -s ASYNCIFY=1 -s ASYNCIFY_ADVISE=0 -s ASYNCIFY_IGNORE_INDIRECT=1 -s ASYNCIFY_ADD=\"[${ASYNCIFY_CALL_STACK}]\" -s FETCH=1 -s ERROR_ON_UNDEFINED_SYMBOLS=0 -s ASSERTIONS=1 -s NO_EXIT_RUNTIME=1 -s FORCE_FILESYSTEM=1 -s EXPORT_ES6=1 -s USE_ES6_IMPORT_META=0 -s MODULARIZE=1 -s EXPORT_NAME='Arrow' -s EXPORTED_RUNTIME_METHODS=\"['FS']\"")
 
