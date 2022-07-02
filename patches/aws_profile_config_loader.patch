@@ -1,8 +1,25 @@
 diff --git a/aws-cpp-sdk-core/source/config/AWSProfileConfigLoader.cpp b/aws-cpp-sdk-core/source/config/AWSProfileConfigLoader.cpp
-index f5ce803..f2272ad 100644
+index f5ce803..ff210d6 100644
 --- a/aws-cpp-sdk-core/source/config/AWSProfileConfigLoader.cpp
 +++ b/aws-cpp-sdk-core/source/config/AWSProfileConfigLoader.cpp
-@@ -253,15 +253,6 @@ namespace Aws
+@@ -34,16 +34,6 @@ namespace Aws
+ 
+         bool AWSProfileConfigLoader::Load()
+         {
+-            if(LoadInternal())
+-            {
+-                AWS_LOGSTREAM_INFO(CONFIG_LOADER_TAG, "Successfully reloaded configuration.");
+-                m_lastLoadTime = DateTime::Now();
+-                AWS_LOGSTREAM_TRACE(CONFIG_LOADER_TAG, "reloaded config at "
+-                        << m_lastLoadTime.ToGmtString(DateFormat::ISO_8601));
+-                return true;
+-            }
+-
+-            AWS_LOGSTREAM_INFO(CONFIG_LOADER_TAG, "Failed to reload configuration.");
+             return false;
+         }
+ 
+@@ -253,15 +243,6 @@ namespace Aws
          {
              m_profiles.clear();
  
@@ -18,7 +35,7 @@ index f5ce803..f2272ad 100644
              AWS_LOGSTREAM_INFO(CONFIG_FILE_LOADER, "Unable to open config file " << m_fileName << " for reading.");
  
              return false;
-@@ -269,46 +260,14 @@ namespace Aws
+@@ -269,46 +250,14 @@ namespace Aws
  
          bool AWSConfigFileProfileConfigLoader::PersistInternal(const Aws::Map<Aws::String, Profile>& profiles)
          {

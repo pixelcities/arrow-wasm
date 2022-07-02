@@ -26,7 +26,16 @@ patch --force -p1 -i /patches/aws_profile_config_loader.patch
 
 # Sockets are also weird, let's strip out libcurl for fetch
 patch --force -p1 -i /patches/curl_http_client.patch
-patch --force -p1 -i /patches/aws_client.patch
+patch --force -p1 -i /patches/curl_http_client_header.patch
+patch --force -p1 -i /patches/curl_handle_container.patch
+patch --force -p1 -i /patches/curl_handle_container_header.patch
+patch --force -p1 -i /patches/client_configuration.patch
+
+# Dummy curl
+mkdir -p /curl/include
+mkdir -p /curl/lib/.libs/
+touch /curl/lib/.libs/libcurl.a
+touch /curl/include/curl.h
 
 cmake ../aws-sdk-cpp \
     -DCMAKE_TOOLCHAIN_FILE=/tmp/emsdk-2.0.24/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \

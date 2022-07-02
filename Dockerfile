@@ -20,9 +20,6 @@ RUN ./setup_emscripten.sh
 COPY ./build_openssl.sh .
 RUN ./build_openssl.sh
 
-COPY ./build_curl.sh .
-RUN ./build_curl.sh
-
 COPY ./build_zlib.sh .
 RUN ./build_zlib.sh
 

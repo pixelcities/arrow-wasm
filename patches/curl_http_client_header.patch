@@ -1,0 +1,13 @@
+diff --git a/aws-cpp-sdk-core/include/aws/core/http/curl/CurlHttpClient.h b/aws-cpp-sdk-core/include/aws/core/http/curl/CurlHttpClient.h
+index ad10856..8739428 100644
+--- a/aws-cpp-sdk-core/include/aws/core/http/curl/CurlHttpClient.h
++++ b/aws-cpp-sdk-core/include/aws/core/http/curl/CurlHttpClient.h
+@@ -45,7 +45,7 @@ protected:
+      * Override any configuration on CURL handle for each request before sending.
+      * The usage is to have a subclass of CurlHttpClient and have your own implementation of this function to configure whatever you want on CURL handle.
+      */
+-    virtual void OverrideOptionsOnConnectionHandle(CURL*) const {}
++    virtual void OverrideOptionsOnConnectionHandle(void*) const {}
+ 
+ private:
+     mutable CurlHandleContainer m_curlHandleContainer;
