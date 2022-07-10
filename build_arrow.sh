@@ -12,7 +12,7 @@ mv arrow-apache-arrow-4.0.1 arrow && rm apache-arrow-4.0.1.tar.gz
 mkdir -p $ARROW_BUILD_DIR
 cd $ARROW_BUILD_DIR
 
-source /tmp/emsdk-2.0.24/emsdk_env.sh
+source /tmp/emsdk-3.1.15/emsdk_env.sh
 
 # Force the builder to find/use the headers
 cp -r /openssl/include/ /build/arrow/src/
@@ -34,11 +34,15 @@ patch --force -p1 -i /patches/arrow_reader.patch
 
 # Revert back to some past commit without async ListObjectsV2
 patch --force -p1 -i /patches/arrow_filesystem_s3fs.patch
+
+# Disable some optional syscall to supress errors
+patch --force -p1 -i /patches/arrow_io_util.patch
+
 popd
 
 # Build arrow-wasm with csv, parquet, and parquet encryption support
 cmake /arrow/cpp \
-    -DCMAKE_TOOLCHAIN_FILE=/tmp/emsdk-2.0.24/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
+    -DCMAKE_TOOLCHAIN_FILE=/tmp/emsdk-3.1.15/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
     -DARROW_CSV=ON \
     -DARROW_PARQUET=ON \
     -DPARQUET_REQUIRE_ENCRYPTION=ON \

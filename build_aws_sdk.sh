@@ -2,8 +2,8 @@
 
 set -e
 
-EM_BIN=/tmp/emsdk-2.0.24/upstream/emscripten
-source /tmp/emsdk-2.0.24/emsdk_env.sh
+EM_BIN=/tmp/emsdk-3.1.15/upstream/emscripten
+source /tmp/emsdk-3.1.15/emsdk_env.sh
 
 wget https://github.com/aws/aws-sdk-cpp/archive/refs/tags/1.8.133.tar.gz -O aws-sdk-cpp.tar.gz
 tar xzf aws-sdk-cpp.tar.gz
@@ -38,7 +38,7 @@ touch /curl/lib/.libs/libcurl.a
 touch /curl/include/curl.h
 
 cmake ../aws-sdk-cpp \
-    -DCMAKE_TOOLCHAIN_FILE=/tmp/emsdk-2.0.24/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
+    -DCMAKE_TOOLCHAIN_FILE=/tmp/emsdk-3.1.15/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake \
     -DCMAKE_INSTALL_PREFIX=/build/arrow/awssdk_ep-install \
     -DCMAKE_PREFIX_PATH=/build/arrow/awssdk_ep-install \
     -DBUILD_SHARED_LIBS=OFF \

@@ -2,7 +2,7 @@
 
 set -e
 
-EM_BIN=/tmp/emsdk-2.0.24/upstream/emscripten
+EM_BIN=/tmp/emsdk-3.1.15/upstream/emscripten
 
 wget https://www.openssl.org/source/openssl-1.1.1k.tar.gz
 tar xzf openssl-1.1.1k.tar.gz
@@ -10,7 +10,7 @@ mv openssl-1.1.1k openssl && rm openssl-1.1.1k.tar.gz
 
 pushd openssl
 
-source /tmp/emsdk-2.0.24/emsdk_env.sh
+source /tmp/emsdk-3.1.15/emsdk_env.sh
 
 # Some weird path substitution bug
 sed -i 's/CROSS_COMPILE/x/g' $EM_BIN/tools/building.py

@@ -1,0 +1,25 @@
+diff --git a/cpp/src/arrow/util/io_util.cc b/cpp/src/arrow/util/io_util.cc
+index b8ed2a4..f82d003 100644
+--- a/cpp/src/arrow/util/io_util.cc
++++ b/cpp/src/arrow/util/io_util.cc
+@@ -1144,20 +1144,6 @@ Status MemoryAdviseWillNeed(const std::vector<MemoryRegion>& regions) {
+     }
+   }
+   return Status::OK();
+-#elif defined(POSIX_MADV_WILLNEED)
+-  for (const auto& region : regions) {
+-    if (region.size != 0) {
+-      const auto aligned = align_region(region);
+-      int err = posix_madvise(aligned.addr, aligned.size, POSIX_MADV_WILLNEED);
+-      // EBADF can be returned on Linux in the following cases:
+-      // - the kernel version is older than 3.9
+-      // - the kernel was compiled with CONFIG_SWAP disabled (ARROW-9577)
+-      if (err != 0 && err != EBADF) {
+-        return IOErrorFromErrno(err, "posix_madvise failed");
+-      }
+-    }
+-  }
+-  return Status::OK();
+ #else
+   return Status::OK();
+ #endif
