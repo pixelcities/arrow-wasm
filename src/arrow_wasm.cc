@@ -211,7 +211,6 @@ void write_remote_parquet(std::string in_path, std::string out_path, std::string
   }
   auto table = *arrow::Table::FromRecordBatches(batches);
 
-
   /* S3 filesystem setup */
   auto options = arrow::fs::S3Options::FromAccessKey(access_key, secret_key, session_token);
   options.region = "eu-west-1";
@@ -268,7 +267,11 @@ void write_remote_parquet(std::string in_path, std::string out_path, std::string
   parquet::arrow::WriteTable(*table, arrow::default_memory_pool(), sink, writer_properties->max_row_group_length(), writer_properties, arrow_properties);
 }
 
+std::string print_exception(int exception_ptr) {
+  return std::string(reinterpret_cast<std::exception *>(exception_ptr)->what());
+}
 EMSCRIPTEN_BINDINGS(my_module) {
+    function("print_exception", &print_exception);
     function("load_csv", &load_csv);
     function("write_remote_parquet", &write_remote_parquet);
     function("read_remote_parquet", &read_remote_parquet);
