@@ -1,12 +1,17 @@
 {
-  "name": "arrow-wasm",
+  "name": "@pixelcities/arrow-wasm",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pixelcities/arrow-wasm.git"
+  },
   "collaborators": [
     "PixelCities"
   ],
-  "version": "0.1.0",
+  "version": "0.1.2",
   "files": [
     "arrow_wasm.wasm",
     "arrow_wasm.js",
+    "arrow_wasm.d.ts",
     "index.js"
   ],
   "module": "index.js",

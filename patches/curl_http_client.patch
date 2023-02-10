@@ -1,5 +1,5 @@
 diff --git a/aws-cpp-sdk-core/source/http/curl/CurlHttpClient.cpp b/aws-cpp-sdk-core/source/http/curl/CurlHttpClient.cpp
-index 03ecf0a..fbaeabd 100644
+index 03ecf0a..1e7f212 100644
 --- a/aws-cpp-sdk-core/source/http/curl/CurlHttpClient.cpp
 +++ b/aws-cpp-sdk-core/source/http/curl/CurlHttpClient.cpp
 @@ -13,7 +13,8 @@
@@ -406,7 +406,7 @@ index 03ecf0a..fbaeabd 100644
  std::shared_ptr<HttpResponse> CurlHttpClient::MakeRequest(const std::shared_ptr<HttpRequest>& request,
      Aws::Utils::RateLimits::RateLimiterInterface* readLimiter,
      Aws::Utils::RateLimits::RateLimiterInterface* writeLimiter) const
-@@ -467,257 +227,180 @@ std::shared_ptr<HttpResponse> CurlHttpClient::MakeRequest(const std::shared_ptr<
+@@ -467,257 +227,184 @@ std::shared_ptr<HttpResponse> CurlHttpClient::MakeRequest(const std::shared_ptr<
      Aws::String url = uri.GetURIString();
      std::shared_ptr<HttpResponse> response = Aws::MakeShared<StandardHttpResponse>(CURL_HTTP_CLIENT_TAG, request);
  
@@ -449,6 +449,10 @@ index 03ecf0a..fbaeabd 100644
 -        headers = curl_slist_append(headers, "transfer-encoding:");
 -    }
 +        if (strcmp(headerString.c_str(), "host") == 0) {
++            continue;
++        } else if (strcmp(headerString.c_str(), "user-agent") == 0) {
++            continue;
++        } else if (strcmp(headerString.c_str(), "content-length") == 0) {
 +            continue;
 +        }
 +        f_headers[i++] = strdup(headerString.c_str());
