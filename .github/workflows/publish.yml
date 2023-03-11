@@ -1,0 +1,34 @@
+name: Publish NPM package
+
+on:
+  push:
+    tags:
+      - "*"
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Compile build environment
+        run: docker build . -t arrow
+      - name: Build
+        run: docker run -v $(pwd)/src:/src arrow
+      - name: Publish package
+        run: |
+          cd src
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
