@@ -11,3 +11,6 @@ cmake /src \
 
 emmake make
 
+# Add subresource integrity
+SRI_HASH=$(cat arrow_wasm.wasm | openssl dgst -sha384 -binary | openssl base64 -A)
+sed -i "s/\(fetch([a-zA-Z]\+, { credentials: 'same-origin'\)/\1, integrity: 'sha384-${SRI_HASH}'/g" arrow_wasm.js
